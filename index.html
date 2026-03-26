@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- عنوان الصفحة في المتصفح -->
+    <title>ملفي الشخصي | Personal Portfolio</title>
+
+    <!-- استدعاء خطوط جوجل للخط العربي Cairo -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- استدعاء مكتبة FontAwesome للأيقونات -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* =========================================
+           إعدادات الألوان والمتغيرات (CSS Variables)
+           ========================================= */
+        :root {
+            /* ← ألوان الوضع الداكن (الافتراضي) */
+            --bg-color: #0b0614;
+            /* خلفية داكنة جداً */
+            --surface-color: #171026;
+            /* لون خلفية العناصر */
+            --text-primary: #ffffff;
+            --text-secondary: #a89bc2;
+            --purple-light: #c299ff;
+            --purple-main: #7c4dff;
+            --purple-dark: #4a148c;
+            --purple-glow: rgba(124, 77, 255, 0.4);
+
+            /* تدرجات لونية للاستخدام في الخلفيات والحدود */
+            --gradient-1: linear-gradient(135deg, var(--purple-light), var(--purple-main));
+            --gradient-2: linear-gradient(45deg, var(--purple-main), var(--purple-dark));
+
+            /* ← ضع رابط صورتك هنا (يجب أن يكون الرابط بين القوسين) */
+            --profile-pic: url('/Users/abd/Library/Mobile Documents/com~apple~CloudDocs/Downloads/github profile face.jpeg');
+        }
+
+        /* متغيرات الألوان عند تفعيل الوضع الفاتح */
+        [data-theme="light"] {
+            --bg-color: #f7f5fa;
+            --surface-color: #ffffff;
+            --text-primary: #1a1525;
+            --text-secondary: #5c4d70;
+            --purple-glow: rgba(124, 77, 255, 0.15);
+        }
+
+        /* =========================================
+           التنسيقات الأساسية (Base Styles)
+           ========================================= */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Cairo', sans-serif;
+            /* تطبيق الخط العربي */
+            /* انتقال سلس لجميع التغيرات اللونية */
+            transition: background-color 0.4s ease, color 0.4s ease, border-color 0.4s ease;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            line-height: 1.7;
+            overflow-x: hidden;
+            /* إخفاء أي محتوى يخرج عن يمين/يسار الشاشة */
+        }
+
+        /* حاوية لتوسيط المحتوى بحد أقصى للعرض */
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* فئة (Class) لتأثير التوهج العام */
+        .glow-effect {
+            box-shadow: 0 0 25px var(--purple-glow);
+        }
+
+        /* العناوين الرئيسية للأقسام */
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 2.5rem;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            /* تطبيق التدرج اللوني على النص */
+            -webkit-text-fill-color: transparent;
+            opacity: 0;
+            /* البداية شفاف لغرض الأنيميشن */
+            animation: fadeInUp 1s ease forwards;
+        }
+
+        /* الزر الخاص بتبديل الوضع (Dark/Light) */
+        .theme-toggle {
+            position: fixed;
+            top: 25px;
+            left: 25px;
+            /* نضعه في اليسار لأن الموقع باللغة العربية (يمين) */
+            background: var(--surface-color);
+            border: 2px solid var(--purple-main);
+            color: var(--purple-main);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            z-index: 1000;
+            box-shadow: 0 0 15px var(--purple-glow);
+            transition: all 0.3s ease;
+        }
+
+        /* تأثير عند وضع الماوس على زر التحكم بالسمة */
+        .theme-toggle:hover {
+            background: var(--purple-main);
+            color: #fff;
+            transform: scale(1.1) rotate(15deg);
+        }
+
+        /* =========================================
+           قسم الهيرو (Hero Section)
+           ========================================= */
+        .hero {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding: 5rem 0 4rem 0;
+            opacity: 0;
+            animation: fadeIn 1.5s ease 0.2s forwards;
+        }
+
+        /* حاوية الصورة لعمل الحدود المتدرجة المضيئة */
+        .profile-img-container {
+            position: relative;
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            padding: 6px;
+            background: var(--gradient-1);
+            margin-bottom: 2rem;
+            box-shadow: 0 0 30px var(--purple-glow);
+            animation: float 4s ease-in-out infinite;
+            /* أنيميشن الطفو المستمر */
+        }
+
+        /* الصورة الدائرية بحد ذاتها */
+        .profile-img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background-image: var(--profile-pic);
+            background-size: cover;
+            background-position: center;
+            border: 4px solid var(--bg-color);
+            /* عمل فاصل بين الصورة والتدرج */
+        }
+
+        .hero h1 {
+            font-size: 3.2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .hero h2 {
+            font-size: 1.6rem;
+            color: var(--purple-light);
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+        }
+
+        .hero p {
+            color: var(--text-secondary);
+            max-width: 650px;
+            font-size: 1.15rem;
+            line-height: 1.8;
+        }
+
+        /* =========================================
+           قسم نبذة عني (About)
+           ========================================= */
+        .about {
+            background: var(--surface-color);
+            padding: 3.5rem;
+            border-radius: 20px;
+            margin-bottom: 4rem;
+            border: 1px solid rgba(124, 77, 255, 0.2);
+            opacity: 0;
+            animation: slideUp 1s ease 0.4s forwards;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* إضافة تأثير زينة لقسم عني */
+        .about::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--gradient-1);
+        }
+
+        .about p {
+            color: var(--text-secondary);
+            font-size: 1.2rem;
+            text-align: justify;
+        }
+
+        /* =========================================
+           قسم المهارات (Skills)
+           ========================================= */
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-bottom: 5rem;
+        }
+
+        .skill-card {
+            background: var(--surface-color);
+            padding: 2.5rem 2rem;
+            border-radius: 15px;
+            border: 1px solid rgba(124, 77, 255, 0.15);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+            opacity: 0;
+            animation: slideUp 1s ease 0.6s forwards;
+            position: relative;
+        }
+
+        /* تأثير Hover على بطاقة المهارة */
+        .skill-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 30px var(--purple-glow);
+            border-color: var(--purple-main);
+        }
+
+        .skill-header {
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            margin-bottom: 0;
+        }
+
+        .skill-info {
+            display: flex;
+            align-items: center;
+        }
+
+        .skill-icon {
+            font-size: 2.5rem;
+            color: var(--purple-main);
+            margin-left: 1rem;
+            /* مسافة لليسار لأن الاتجاه RTL */
+            transition: transform 0.3s ease;
+        }
+
+        .skill-card:hover .skill-icon {
+            transform: scale(1.1);
+            color: var(--purple-light);
+        }
+
+        .skill-name {
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+
+        .skill-percent {
+            font-weight: 700;
+            color: var(--purple-light);
+            font-size: 1.2rem;
+        }
+
+        /* شريط تقدم المهارة */
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background: rgba(124, 77, 255, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        [data-theme="light"] .progress-bar {
+            background: rgba(0, 0, 0, 0.05);
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--gradient-1);
+            border-radius: 10px;
+            width: 0;
+            /* يبدأ بعرض 0 ويتم تحريكه برمجياً */
+            transition: width 1.5s cubic-bezier(0.1, 0.5, 0.2, 1);
+            box-shadow: 0 0 10px var(--purple-glow);
+        }
+
+        /* =========================================
+           قسم مواقع التواصل الاجتماعي (Social Media)
+           ========================================= */
+        .social-sections {
+            text-align: center;
+            margin-bottom: 5rem;
+            opacity: 0;
+            animation: slideUp 1s ease 0.8s forwards;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .social-link {
+            width: 65px;
+            height: 65px;
+            border-radius: 50%;
+            background: var(--surface-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            color: var(--text-primary);
+            text-decoration: none;
+            border: 2px solid rgba(124, 77, 255, 0.25);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        /* تأثير Hover لأزرار التواصل الاجتماعي */
+        .social-link:hover {
+            background: var(--gradient-1);
+            color: #fff;
+            transform: translateY(-8px) scale(1.1);
+            /* تأثير الصعود والتكبير */
+            box-shadow: 0 10px 25px var(--purple-glow);
+            border-color: transparent;
+        }
+
+        /* =========================================
+           قسم التواصل (Contact)
+           ========================================= */
+        .contact-section {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 2rem;
+            opacity: 0;
+            animation: slideUp 1s ease 1s forwards;
+            padding-bottom: 3rem;
+        }
+
+        .contact-item {
+            background: var(--surface-color);
+            padding: 1.5rem 2.5rem;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            gap: 1.2rem;
+            border: 1px solid rgba(124, 77, 255, 0.15);
+            transition: all 0.3s ease;
+        }
+
+        /* تأثير Hover لعناصر التواصل */
+        .contact-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px var(--purple-glow);
+            border-color: var(--purple-main);
+            background: rgba(124, 77, 255, 0.05);
+        }
+
+        .contact-icon {
+            font-size: 1.8rem;
+            color: var(--purple-main);
+        }
+
+        .contact-text {
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        /* =========================================
+           الرسومات المتحركة في الخلفية
+           ========================================= */
+        .bg-shapes {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .shape {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(60px);
+            opacity: 0.65;
+            animation: moveShapes 20s infinite alternate ease-in-out;
+        }
+
+        .shape-1 {
+            width: 450px;
+            height: 450px;
+            background: var(--purple-main);
+            top: -50px;
+            right: -50px;
+        }
+
+        .shape-2 {
+            width: 400px;
+            height: 400px;
+            background: var(--purple-light);
+            bottom: -50px;
+            left: -50px;
+            animation-delay: -5s;
+        }
+
+        .shape-3 {
+            width: 300px;
+            height: 300px;
+            background: var(--purple-dark);
+            top: 40%;
+            left: 50%;
+            animation-delay: -10s;
+        }
+
+        .shape-4 {
+            width: 350px;
+            height: 350px;
+            background: rgba(186, 104, 200, 0.7);
+            top: 15%;
+            left: 10%;
+            animation-delay: -7s;
+        }
+
+        .shape-5 {
+            width: 400px;
+            height: 400px;
+            background: rgba(156, 39, 176, 0.6);
+            bottom: 20%;
+            right: 15%;
+            animation-delay: -15s;
+        }
+
+        @keyframes moveShapes {
+            0% {
+                transform: translate(0, 0) scale(1);
+            }
+
+            50% {
+                transform: translate(-30px, 50px) scale(1.1);
+            }
+
+            100% {
+                transform: translate(30px, -50px) scale(0.9);
+            }
+        }
+
+        /* =========================================
+           تأثيرات الحركة (Keyframes Animations)
+           ========================================= */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0px);
+                box-shadow: 0 0 20px var(--purple-glow);
+            }
+
+            50% {
+                transform: translateY(-15px);
+                box-shadow: 0 0 40px var(--purple-glow);
+            }
+
+            100% {
+                transform: translateY(0px);
+                box-shadow: 0 0 20px var(--purple-glow);
+            }
+        }
+
+        /* =========================================
+           التجاوب مع الشاشات (Responsive Design)
+           ========================================= */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+
+            .hero h2 {
+                font-size: 1.3rem;
+            }
+
+            .container {
+                padding: 1.5rem;
+            }
+
+            .about {
+                padding: 2rem;
+            }
+
+            .theme-toggle {
+                top: 15px;
+                left: 15px;
+                width: 45px;
+                height: 45px;
+            }
+
+            .contact-item {
+                width: 100%;
+                justify-content: flex-start;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- رسومات خلفية متحركة -->
+    <div class="bg-shapes">
+        <div class="shape shape-1"></div>
+        <div class="shape shape-2"></div>
+        <div class="shape shape-3"></div>
+        <div class="shape shape-4"></div>
+        <div class="shape shape-5"></div>
+    </div>
+
+    <!-- زر التبديل بين الوضع المظلم والمضيء -->
+    <button class="theme-toggle" id="themeBtn" aria-label="Toggle Theme">
+        <i class="fas fa-sun"></i> <!-- سيُعرض الشمس أولاً لأن الوضع الافتراضي داكن ونريد التحويل للفاتح -->
+    </button>
+
+    <div class="container">
+
+        <!-- قسم الهيرو (الواجهة الرئيسية) -->
+        <section class="hero">
+            <div class="profile-img-container">
+                <div class="profile-img"></div>
+            </div>
+
+            <!-- ← ضع اسمك هنا -->
+            <h1 id="userName">Abulmlik saad </h1>
+
+            <!-- ← ضع مسماك الوظيفي هنا -->
+            <h2 id="jobTitle">Frontend Developer | UI/UX Designer | ✦ AI-Powered</h2>
+
+            <!-- ← ضع الجملة التعريفية القصيرة هنا -->
+            <p id="shortBio">
+            </p>
+        </section>
+
+        <!-- قسم النبذة (عني) -->
+        <section class="about">
+            <h3 class="section-title">نبذة عني</h3>
+
+            <!-- ← ضع فقرة التفاصيل عنك هنا -->
+            <p id="aboutText">
+                أنا عبدالملك سعد، مصمم ومطور واجهات أمامية أعمل على بناء مواقع ويب احترافية بدمج الخبرة التقنية مع أدوات
+                الذكاء الاصطناعي. أهتم بكل تفصيلة في التصميم وأحرص على تقديم تجربة مستخدم عمليه ومتقنه ، مع الالتزام
+                بأحدث معايير البرمجة لضمان أداء عالي وسرعة في التنفيذ
+            </p>
+        </section>
+
+        <!-- قسم المهارات التقنية -->
+        <section class="skills">
+            <h3 class="section-title">المهارات </h3>
+            <!-- سيتم توليد البطاقات هنا ديناميكياً باستخدام جافاسكريبت -->
+            <div class="skills-grid" id="skillsContainer"></div>
+        </section>
+
+        <!-- قسم مواقع التواصل الاجتماعي -->
+        <section class="social-sections">
+            <!-- سيتم توليد الروابط هنا ديناميكياً باستخدام جافاسكريبت -->
+            <div class="social-links" id="socialContainer"></div>
+        </section>
+
+        <!-- قسم معلومات الاتصال المباشر -->
+        <section class="contact-section">
+
+            <!-- البريد الإلكتروني -->
+            <div class="contact-item">
+                <i class="fas fa-envelope contact-icon"></i>
+                <!-- ← ضع بريدك الإلكتروني هنا -->
+                <span class="contact-text" id="emailText">iphone.malik25@gmail.com</span>
+            </div>
+
+            <!-- رقم الهاتف -->
+            <div class="contact-item">
+                <i class="fas fa-phone contact-icon"></i>
+                <!-- ← ضع رقم هاتفك هنا -->
+                <span class="contact-text" id="phoneText" dir="ltr">+964 776 197 4985</span>
+            </div>
+
+            <!-- الموقع الجغرافي -->
+            <div class="contact-item">
+                <i class="fas fa-map-marker-alt contact-icon"></i>
+                <!-- ← ضع موقعك الجغرافي هنا -->
+                <span class="contact-text" id="locationText"></span>Iraq, Baghdad </span>
+            </div>
+
+        </section>
+
+    </div>
+
+    <!-- =========================================
+         كود جافاسكريبت (JavaScript)
+         ========================================= -->
+    <script>
+        /**
+         * 1. إعدادات روابط التواصل الاجتماعي
+         * يمكنك إضافة روابط حساباتك الحقيقية هنا. 
+         * إذا تركت الرابط فارغاً "" فلن يظهر الزر الخاص به.
+         */
+        const socialLinks = {
+            // ← ضع رابط حسابك على جيت هب هنا
+            github: "https://github.com/abdulmalik800",
+            // ← ضع رابط حسابك على لينكد إن هنا
+            linkedin: "https://www.linkedin.com/in/abdul-malik-saad-bb36b4344?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app/",
+            // ← ضع رابط حسابك على إنستغرام هنا
+            instagram: "https://www.instagram.com/abdul_malik.dev?igsh=MW0wZHV3Zmk1NzUycw==/",
+            // ← ضع رابط حسابك على تليجرام هنا
+            telegram: "https://t.me/TTRQX"
+        };
+
+        /**
+         * 2. قائمة المهارات التقنية 
+         * يمكنك التعديل وإضافة مهارات جديدة (الاسم، الفئة الخاصة بالأيقونة، النسبة المئوية)
+         */
+        const skillsList = [
+            { name: "HTML5 & CSS3", icon: "fab fa-html5", percentage: 95 },
+            { name: "JavaScript", icon: "fab fa-js", percentage: 85 },
+            { name: "UI & UX Design", icon: "fas fa-palette", percentage: 90 },
+            { name: "Node.js", icon: "fab fa-node-js", percentage: 70 }
+        ];
+
+        // ----------------------------------------------------
+        // المنطق البرمجي (اللوجيك)
+        // ----------------------------------------------------
+
+        // أ- حقن بطاقات المهارات في واجهة المستخدم
+        const skillsContainer = document.getElementById("skillsContainer");
+
+        skillsList.forEach(skill => {
+            // إنشاء كائن (عنصر) لكل بطاقة مهارة
+            const card = document.createElement("div");
+            card.className = "skill-card";
+
+            // إضافة محتوى الـ HTML الداخلي للبطاقة
+            card.innerHTML = `
+                <div class="skill-header">
+                    <div class="skill-info">
+                        <i class="${skill.icon} skill-icon"></i>
+                        <span class="skill-name">${skill.name}</span>
+                    </div>
+                </div>
+            `;
+            skillsContainer.appendChild(card);
+        });
+
+        // ب- حقن أزرار التواصل الاجتماعي
+        const socialContainer = document.getElementById("socialContainer");
+
+        // ربط مفتاح الشبكة بالأيقونة الخاصة بها في FontAwesome
+        const socialIconsMap = {
+            github: "fab fa-github",
+            linkedin: "fab fa-linkedin-in",
+            instagram: "fab fa-instagram",
+            telegram: "fab fa-telegram-plane"
+        };
+
+        // المرور على المفاتيح لإنشاء الأزرار لو كان الرابط موجوداً
+        Object.keys(socialLinks).forEach(key => {
+            const url = socialLinks[key];
+            if (url && url.trim() !== "") {
+                const linkElement = document.createElement("a");
+                linkElement.href = url;
+                linkElement.className = "social-link";
+                linkElement.target = "_blank";         // فتح الرابط في صفحة جديدة
+                linkElement.rel = "noopener noreferrer"; // تحسين أمني مهم
+                linkElement.innerHTML = `<i class="${socialIconsMap[key]}"></i>`;
+                socialContainer.appendChild(linkElement);
+            }
+        });
+
+        // تم إلغاء شريط التقدم بناءً على طلبك
+
+        // د- نظام التبديل بين الوضع الفاتح والداكن (Dark/Light Toggle)
+        const themeBtn = document.getElementById("themeBtn");
+        let isDarkTheme = true; // الافتراضي هو الداكن
+
+        themeBtn.addEventListener("click", () => {
+            isDarkTheme = !isDarkTheme; // قلب الحالة
+
+            // تعيين السمة لملف HTML مما يؤثر على ألوان الجذر :root
+            document.documentElement.setAttribute('data-theme', isDarkTheme ? 'dark' : 'light');
+
+            // تغيير أيقونة الزر بناءً على الوضع المختار
+            // إذا كان داكن، اظهر أيقونة الشمس لتمكين الانتقال للفاتح، والعكس صحيح
+            themeBtn.innerHTML = isDarkTheme ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+        });
+
+    </script>
+</body>
+
+</html>
