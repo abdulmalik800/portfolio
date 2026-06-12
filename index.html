@@ -132,6 +132,41 @@
             background: rgba(124, 77, 255, 0.12);
         }
 
+        .site-header {
+            display: flex;
+            justify-content: flex-end;
+            padding: 1rem 1.5rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(18px);
+            background: rgba(8, 4, 15, 0.45);
+            border-bottom: 1px solid rgba(124, 77, 255, 0.14);
+        }
+
+        .site-nav {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+        }
+
+        .site-nav a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 600;
+            padding: 0.6rem 0.9rem;
+            border-radius: 999px;
+            transition: background-color 0.3s ease, color 0.3s ease, transform 0.3s ease;
+        }
+
+        .site-nav a:hover,
+        .site-nav a:focus-visible {
+            color: #fff;
+            background: rgba(124, 77, 255, 0.16);
+            transform: translateY(-2px);
+        }
+
         .hero {
             min-height: 100vh;
             display: flex;
@@ -240,9 +275,8 @@
         .projects-section,
         .social-sections,
         .contact-section {
-            opacity: 0;
-            transform: translateY(60px) rotateX(10deg);
-            transform-origin: top center;
+            opacity: 1;
+            transform: none;
         }
 
         .about {
@@ -667,10 +701,20 @@
         <i class="fas fa-sun"></i> <!-- سيُعرض الشمس أولاً لأن الوضع الافتراضي داكن ونريد التحويل للفاتح -->
     </button>
 
+    <header class="site-header" role="banner">
+        <nav class="site-nav" aria-label="Main navigation">
+            <a href="#home">الرئيسية</a>
+            <a href="#about">نبذة</a>
+            <a href="#skills">المهارات</a>
+            <a href="#projects">المشاريع</a>
+            <a href="#contact">تواصل</a>
+        </nav>
+    </header>
+
     <div class="container">
 
         <!-- قسم الهيرو (الواجهة الرئيسية) -->
-        <section class="hero">
+        <section class="hero" id="home">
             <div class="profile-img-container">
                 <div class="profile-img"></div>
             </div>
@@ -687,7 +731,7 @@
         </section>
 
         <!-- قسم النبذة (عني) -->
-        <section class="about">
+        <section class="about" id="about">
             <h3 class="section-title">نبذة عني</h3>
 
             <!-- ← ضع فقرة التفاصيل عنك هنا -->
@@ -699,53 +743,62 @@
         </section>
 
         <!-- قسم المهارات التقنية -->
-        <section class="skills">
+        <section class="skills" id="skills">
             <h3 class="section-title">المهارات </h3>
             <!-- سيتم توليد البطاقات هنا ديناميكياً باستخدام جافاسكريبت -->
             <div class="skills-grid" id="skillsContainer"></div>
         </section>
 
         <!-- قسم الشهادات (Certifications) -->
-        <section class="certificates">
+        <section class="certificates" id="certificates">
             <h3 class="section-title">الشهادات</h3>
             <!-- سيتم توليد الشهادات هنا ديناميكياً باستخدام جافاسكريبت -->
             <div class="certificates-grid" id="certificatesContainer"></div>
         </section>
 
         <!-- قسم المشاريع (Projects) — مباشرةً أسفل الشهادات -->
-        <section class="projects-section" id="projectsSection">
+        <section class="projects-section" id="projects">
             <h3 class="section-title">المشاريع</h3>
             <!-- سيتم توليد بطاقات المشاريع هنا ديناميكياً باستخدام جافاسكريبت -->
             <div class="projects-grid" id="projectsContainer"></div>
         </section>
 
         <!-- قسم مواقع التواصل الاجتماعي -->
-        <section class="social-sections">
+        <section class="social-sections" id="social">
             <!-- سيتم توليد الروابط هنا ديناميكياً باستخدام جافاسكريبت -->
             <div class="social-links" id="socialContainer"></div>
         </section>
 
         <!-- قسم معلومات الاتصال المباشر -->
-        <section class="contact-section">
+        <section class="contact-section" id="contact">
 
             <!-- البريد الإلكتروني -->
             <div class="contact-item">
-                <i class="fas fa-envelope contact-icon"></i>
-                <!-- ← ضع بريدك الإلكتروني هنا -->
+                <span class="contact-icon svg-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                        <path d="M20 4H4C2.9 4 2 4.9 2 6v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4.5l-8 4.99L4 8.5V6l8 5 8-5v2.5z"/>
+                    </svg>
+                </span>
                 <span class="contact-text" id="emailText">iphone.malik25@gmail.com</span>
             </div>
 
             <!-- رقم الهاتف -->
             <div class="contact-item">
-                <i class="fas fa-phone contact-icon"></i>
-                <!-- ← ضع رقم هاتفك هنا -->
+                <span class="contact-icon svg-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                        <path d="M6.62 10.79a15.053 15.053 0 006.59 6.59l2.2-2.2a1 1 0 011.11-.21c1.2.49 2.5.76 3.83.76a1 1 0 011 1v3.5a1 1 0 01-1 1C10.07 21.5 2.5 13.93 2.5 4a1 1 0 011-1H7a1 1 0 011 1c0 1.33.26 2.63.76 3.83a1 1 0 01-.21 1.11l-2.2 2.2z"/>
+                    </svg>
+                </span>
                 <span class="contact-text" id="phoneText" dir="ltr">+964 776 197 4985</span>
             </div>
 
             <!-- الموقع الجغرافي -->
             <div class="contact-item">
-                <i class="fas fa-map-marker-alt contact-icon"></i>
-                <!-- ← ضع موقعك الجغرافي هنا -->
+                <span class="contact-icon svg-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                        <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5S10.62 6.5 12 6.5s2.5 1.12 2.5 2.5S13.38 11.5 12 11.5z"/>
+                    </svg>
+                </span>
                 <span class="contact-text" id="locationText">Iraq, Baghdad</span>
             </div>
 
@@ -904,6 +957,13 @@
             themeBtn.innerHTML = isDarkTheme ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
         });
 
+        function revealFallbackSections() {
+            document.querySelectorAll('.about, .skills, .certificates, .projects-section, .social-sections, .contact-section').forEach(section => {
+                section.style.opacity = '1';
+                section.style.transform = 'none';
+            });
+        }
+
         if (!window.THREE) {
             console.error('Three.js failed to load.');
         }
@@ -912,6 +972,9 @@
         }
         if (window.gsap && !window.gsap.ScrollTrigger) {
             console.error('GSAP ScrollTrigger failed to load.');
+        }
+        if (!window.gsap || !window.gsap.ScrollTrigger) {
+            revealFallbackSections();
         }
 
         const heroCanvas = document.getElementById('heroCanvas');
@@ -1011,7 +1074,8 @@
             floatingGroup.children.forEach((mesh, index) => {
                 mesh.rotation.x += 0.002 + mesh.userData.speed * 0.2;
                 mesh.rotation.y += 0.003 + mesh.userData.speed * 0.15;
-                mesh.position.y += Math.sin(elapsed * 0.9 + index) * 0.0009;
+                mesh.position.y += Math.sin(elapsed * 0.9 + index) * 0.008;
+                mesh.position.x += Math.sin(elapsed * 0.5 + index * 0.7) * 0.002;
             });
             particleSystem.rotation.y = elapsed * 0.02;
             orbitRing.rotation.z = elapsed * 0.16;
